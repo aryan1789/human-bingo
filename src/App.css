@@ -1,13 +1,40 @@
-table {
+/* Table layout: responsive and fills container */
+.bingo-table {
+  width: 100%;
+  max-width: 960px;
   margin: 0 auto;
   border-collapse: collapse;
+  table-layout: fixed; /* make columns share available space */
 }
 
-td {
+.bingo-table td {
   border: 1px solid #000;
   padding: 12px 16px;
-  min-width: 160px;
   text-align: center;
+  vertical-align: middle;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+h1 {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* Container to center content and limit width */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.cell {
+  background: #fff;
+  touch-action: manipulation;
+}
+
+.item-text {
+  word-wrap: break-word;
 }
 
 .completed {
@@ -16,9 +43,9 @@ td {
 }
 
 .cell-name {
-  font-size: 0.9em;
-  color: #222;
-  margin-top: 6px;
+  font-size: 0.95em;
+  color: #111;
+  margin-top: 8px;
 }
 
 ul {
@@ -26,4 +53,13 @@ ul {
   margin: 0.5rem auto 2rem;
   text-align: left;
   padding-left: 1.2rem;
+}
+
+@media (max-width: 640px) {
+  .bingo-table td { padding: 10px; }
+  .item-text { font-size: 0.95em }
+}
+
+@media (max-width: 420px) {
+  .bingo-table td { padding: 8px; }
 }

@@ -32,59 +32,47 @@ const items: string[] = [
 function App() {
   const [names, setNames] = useState<Array<string | null>>(Array(items.length).fill(null))
 
-  const rows: JSX.Element[] = []
-  for (let r = 0; r < 5; r++) {
-    const cols: JSX.Element[] = []
-    for (let c = 0; c < 5; c++) {
-      const idx = r * 5 + c
-      const filled = !!names[idx]
-      cols.push(
-        <td
-          key={c}
-          className={filled ? 'completed' : ''}
-          onClick={() => {
-            const current = names[idx] ?? ''
-            const input = window.prompt('Enter name for this square:', current)
-            if (input === null) return
-            const trimmed = input.trim()
-            if (trimmed === '') return
-            setNames(prev => {
-              const next = [...prev]
-              next[idx] = trimmed
-              return next
-            })
-          }}
-          style={{ cursor: 'pointer' }}
-        >
-          <div>{items[idx] ?? ''}</div>
-          {filled && <div className="cell-name">— {names[idx]}</div>}
-        </td>
-      )
-    }
-    rows.push(<tr key={r}>{cols}</tr>)
+  const handleSetName = (idx: number) => {
+    const current = names[idx] ?? ''
+    const input = window.prompt('Enter name for this square:', current)
+    if (input === null) return
+    const trimmed = input.trim()
+    setNames(prev => {
+      const next = [...prev]
+      next[idx] = trimmed === '' ? null : trimmed
+      return next
+    })
   }
 
-  const found = names
-    .map((n, i) => (n ? { name: n, item: items[i] } : null))
-    .filter(Boolean) as Array<{ name: string; item: string }>
-
   return (
-    <div>
+    <div className="container">
       <h1>Human Bingo</h1>
-      <table>
-        <tbody>{rows}</tbody>
-      </table>
 
-      <h2>Completed Squares</h2>
-      {found.length === 0 ? (
-        <p>No completed squares yet.</p>
-      ) : (
-        <ul>
-          {found.map((f, i) => (
-            <li key={i}>{f.name} — {f.item}</li>
+      <table className="bingo-table">
+        <tbody>
+          {Array.from({ length: 5 }).map((_, r) => (
+            <tr key={r}>
+              {Array.from({ length: 5 }).map((_, c) => {
+                const idx = r * 5 + c
+                return (
+                  <td
+                    key={c}
+                    role="button"
+                    tabIndex={0}
+                    className={`cell ${names[idx] ? 'completed' : ''}`}
+                    onClick={() => handleSetName(idx)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSetName(idx) } }}
+                  >
+                    <div className="item-text">{items[idx] ?? ''}</div>
+                    {names[idx] && <div className="cell-name">{names[idx]}</div>}
+                  </td>
+                )
+              })}
+            </tr>
           ))}
-        </ul>
-      )}
+        </tbody>
+      </table>
+      
 
     </div>
   )
