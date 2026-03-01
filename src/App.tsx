@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 const items: string[] = [
@@ -30,7 +30,41 @@ const items: string[] = [
 ]
 
 function App() {
-  const [names, setNames] = useState<Array<string | null>>(Array(items.length).fill(null))
+  const COOKIE_NAME = 'human_bingo_names'
+
+  // Initialize from cookie synchronously to avoid overwriting it on mount.
+  const [names, setNames] = useState<Array<string | null>>(() => {
+    try {
+      if (typeof document !== 'undefined') {
+        const cookie = document.cookie.split('; ').find(row => row.startsWith(`${COOKIE_NAME}=`))
+        if (cookie) {
+          const val = decodeURIComponent(cookie.split('=')[1] || '')
+          const parsed = JSON.parse(val)
+          if (Array.isArray(parsed)) {
+            // Ensure length matches items length
+            const out: Array<string | null> = Array(items.length).fill(null)
+            for (let i = 0; i < Math.min(parsed.length, items.length); i++) {
+              out[i] = parsed[i] === null ? null : String(parsed[i])
+            }
+            return out
+          }
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+    return Array(items.length).fill(null)
+  })
+
+  // persist names whenever they change
+  useEffect(() => {
+    try {
+      const v = encodeURIComponent(JSON.stringify(names))
+      document.cookie = `${COOKIE_NAME}=${v}; path=/; max-age=${60 * 60 * 24 * 365}`
+    } catch (e) {
+      // ignore
+    }
+  }, [names])
 
   const handleSetName = (idx: number) => {
     const current = names[idx] ?? ''
