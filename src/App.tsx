@@ -172,31 +172,22 @@ function App() {
       
 
       <div className="table-wrap">
-      <table className="bingo-table">
-        <tbody>
-          {Array.from({ length: 5 }).map((_, r) => (
-            <tr key={r}>
-              {Array.from({ length: 5 }).map((_, c) => {
-                const idx = r * 5 + c
-                return (
-                  <td
-                    key={c}
-                    role={names[idx] ? undefined : 'button'}
-                    tabIndex={names[idx] ? -1 : 0}
-                    className={`cell ${names[idx] ? 'completed' : ''}`}
-                    onClick={() => { if (!names[idx]) handleSetName(idx) }}
-                    onKeyDown={(e) => { if (!names[idx] && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleSetName(idx) } }}
-                  >
-                    <div className={`item-text ${names[idx] ? 'struck' : ''}`}>{items[idx] ?? ''}</div>
-                    {names[idx] && <div className="cell-name"><strong>{names[idx]}</strong></div>}
-                  </td>
-                )
-              })}
-            </tr>
+        <div className="bingo-grid" role="grid" aria-label="Human Bingo">
+          {items.map((item, idx) => (
+            <div
+              key={idx}
+              role="button"
+              tabIndex={0}
+              className={`cell ${names[idx] ? 'completed' : ''}`}
+              onClick={() => { if (!names[idx]) handleSetName(idx) }}
+              onKeyDown={(e) => { if (!names[idx] && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); handleSetName(idx) } }}
+              data-index={idx}
+            >
+              <div className={`item-text ${names[idx] ? 'struck' : ''}`}>{item ?? ''}</div>
+              {names[idx] && <div className="cell-name"><strong>{names[idx]}</strong></div>}
+            </div>
           ))}
-        </tbody>
-      </table>
-      
+        </div>
       </div>
       
 <div className="controls">
