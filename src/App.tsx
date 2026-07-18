@@ -1,68 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import './App.css'
+import { generateItems, BOARD_SIZE } from './prompts'
 
 const ITEM_COOKIE = 'human_bingo_items_v1'
-const BOARD_SIZE = 16
-
-function pick<T>(arr: T[]) { return arr[Math.floor(Math.random() * arr.length)] }
-function randomLetter() { return String.fromCharCode(65 + Math.floor(Math.random() * 26)) }
-
-function generateItems(): string[] {
-  const handedness = ['left handed', 'right handed', 'ambidextrous']
-  const lecture_time = ['Morning', 'Afternoon', 'Evening']
-  const pineapple = ['likes', 'dislikes']
-  const study_year = ['1st', '2nd', '3rd', '4th+']
-  const majors = [
-    'Data Science','Mechatronics Engineering','Mechanical Engineering',
-    'Software Development','Cybersecurity and Networks','Digital Services',
-    'Architectural Engineering','Civil Construction Engineering',
-    'Electrical and Electronic Engineering'
-  ]
-  const bachelors = ['Engineering', 'Computer Science']
-  const commute = ['car', 'bus', 'train', 'bike', 'walking']
-  const study_pref = ['alone', 'with friends', 'in a library', 'at home', 'with music']
-  const visited = ['Australia', 'Japan', 'America', 'China', 'Russia']
-  const fitness = ['gym workouts', 'running', 'team sports', 'yoga']
-  const weather = ['hot', 'cold', 'rainy', 'snowy']
-  const coffee = ['black', 'milky', 'iced', 'flavored']
-  const learning_style = ['hands-on', 'visual', 'traditional', 'discussion-based']
-  const free_time = ['gaming', 'reading', 'watching movies', 'playing sports', 'doing creative hobbies']
-  const pets = ['dog', 'cat', 'fish', 'bird', 'brother', 'sister']
-  const food = ['pizza', 'sushi', 'burgers', 'salad', 'pasta']
-
-  const generators: Array<() => string> = [
-    () => `Find someone who is ${pick(handedness)}`,
-    () => 'Find someone who can speak multiple languages',
-    () => `Find someone whose name starts with ${randomLetter()}`,
-    () => `Find someone who prefers ${pick(lecture_time)} lectures`,
-    () => `Find someone who ${pick(pineapple)} pineapple on pizza`,
-    () => `Find someone in their ${pick(study_year)} year of study`,
-    () => `Find someone studying ${pick(majors)}`,
-    () => `Find someone studying a Bachelor of ${pick(bachelors)}`,
-    () => `Find someone who commutes by ${pick(commute)}`,
-    () => `Find someone who prefers studying ${pick(study_pref)}`,
-    () => `Find someone who has visited ${pick(visited)}`,
-    () => `Find someone who participates in ${pick(fitness)}`,
-    () => `Find someone who prefers ${pick(weather)} weather`,
-    () => `Find someone who drinks ${pick(coffee)} coffee`,
-    () => `Find someone who prefers ${pick(learning_style)} learning`,
-    () => `Find someone who spends free time ${pick(free_time)}`,
-    () => `Find someone who has a ${pick(pets)}`,
-    () => `Find someone who likes ${pick(food)}`,
-    () => 'Find someone who is a morning person',
-    () => 'Find someone who enjoys cooking',
-    () => 'Find someone who prefers tea',
-    () => 'Find someone who can roller skate',
-    () => 'Find someone who likes board games'
-  ]
-
-  const out = new Set<string>()
-  let attempts = 0
-  while (out.size < BOARD_SIZE && attempts < 1000) { attempts++; out.add(pick(generators)()) }
-  const result = Array.from(out)
-  while (result.length < BOARD_SIZE) result.push(`Find someone interesting #${result.length + 1}`)
-  return result.slice(0, BOARD_SIZE)
-}
 
 function readItemsFromCookie(): string[] | null {
   try {

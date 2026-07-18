@@ -1,0 +1,174 @@
+:root {
+  --brand: #d97706;
+  --brand-dark: #b45309;
+  --brand-light: #fde68a;
+  --text-primary: #1c1917;
+  --text-muted: #78716c;
+  --cell-border: #e5e0d8;
+  --bg-page: #faf9f7;
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+/* ── Control bar (screen only) ── */
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #fff;
+  border-bottom: 1.5px solid var(--cell-border);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.toolbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--brand-dark);
+  flex-basis: 100%;
+}
+.qty-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.qty-label input {
+  width: 90px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  border: 1.5px solid var(--cell-border);
+  border-radius: 8px;
+  color: var(--text-primary);
+}
+button {
+  padding: 9px 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 150ms ease, transform 120ms ease;
+}
+.btn-secondary {
+  border: 1.5px solid var(--cell-border);
+  background: #fff;
+  color: var(--text-primary);
+}
+.btn-secondary:hover { background: #f5f3ef; }
+.btn-primary {
+  border: none;
+  color: #fff;
+  background: var(--brand);
+  box-shadow: 0 4px 14px rgba(217,119,6,0.3);
+}
+.btn-primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
+.hint {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ── Preview area (screen) ── */
+.preview { padding: 20px; }
+
+/* ── A4 sheet: two cards, cut line between ── */
+.sheet {
+  background: #fff;
+  margin: 0 auto 20px;
+  width: 190mm;
+  max-width: 100%;
+  padding: 8mm;
+  display: flex;
+  flex-direction: column;
+  gap: 6mm;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+}
+.slot { position: relative; flex: 1; min-height: 0; }
+
+.card {
+  border: 1.5px solid #333;
+  border-radius: 4px;
+  padding: 5mm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.card-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 4mm;
+  color: #111;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 2mm;
+  flex: 1;
+}
+.cell {
+  border: 1px solid #444;
+  border-radius: 3px;
+  padding: 2mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  min-height: 24mm;
+}
+.cell-text {
+  font-size: 8.5pt;
+  line-height: 1.2;
+  color: #111;
+  word-break: break-word;
+  hyphens: auto;
+}
+.cell-line {
+  border-bottom: 1px solid #999;
+  height: 5mm;
+  margin-top: 2mm;
+}
+.cut-line {
+  position: absolute;
+  left: -8mm;
+  right: -8mm;
+  bottom: -3mm;
+  border-top: 1.5px dashed #b0b0b0;
+}
+
+/* ── Print output ── */
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .preview { padding: 0; }
+  @page { size: A4; margin: 10mm; }
+  .sheet {
+    width: auto;
+    height: 277mm;          /* A4 height minus 10mm top/bottom margins */
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+    break-after: page;
+  }
+  .sheet:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+  .cut-line { border-top-color: #999; }
+}

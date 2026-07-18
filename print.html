@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Human Bingo — Printable Cards</title>
+</head>
+<body>
+  <div class="toolbar no-print">
+    <h1>Human Bingo — Printable Cards</h1>
+    <label class="qty-label">
+      Number of cards
+      <input id="qty" type="number" min="2" max="60" value="10" />
+    </label>
+    <button class="btn-secondary" id="regenerate">Regenerate</button>
+    <button class="btn-primary" id="print">Print</button>
+    <p class="hint">
+      2 cards per A4 page — cut along the dashed line. Each card is randomized from the same prompt pool as the web app.
+    </p>
+  </div>
+
+  <div class="preview" id="preview"></div>
+
+  <script type="module" src="/src/print.ts"></script>
+</body>
+</html>
